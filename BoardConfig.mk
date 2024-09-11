@@ -56,7 +56,6 @@ TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
 RECOVERY_GRAPHICS_FORCE_USE_LINELENGTH := true
 RECOVERY_SDCARD_ON_DATA := true
 TW_USE_TOOLBOX := true
-TW_NEW_ION_HEAP := true
 TW_THEME := portrait_mdpi
 TARGET_RECOVERY_FSTAB := device/huawei/y560/recovery/twrp.fstab
 TARGET_RECOVERY_PIXEL_FORMAT := "RGB_565"
