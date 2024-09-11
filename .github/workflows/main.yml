@@ -40,7 +40,7 @@ jobs:
         export PATH="$HOME/.jdk_7/java-se-7u75-ri/bin:$PATH"
         export JAVA_HOME="$HOME/.jdk_7/java-se-7u75-ri"
         cd ~/TWRP
-        git clone https://github.com/KonstaT/android_kernel_huawei_msm8909 -b cm-13.0 ~/TWRP/kernel/huawei/msm8909
+        git clone https://github.com/KonstaT/android_kernel_huawei_msm8909 -b cm-14.1 ~/TWRP/kernel/huawei/msm8909
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
         export LC_ALL=C
