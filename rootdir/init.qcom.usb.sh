@@ -1,3 +1,4 @@
+#!/system/bin/sh
 vbus_draw=`getprop persist.sys.usb.vbus.draw`
 if [ "$vbus_draw" != "" ]; then
 	echo "${vbus_draw}" > /sys/module/ci13xxx_msm/parameters/vbus_draw_mA
