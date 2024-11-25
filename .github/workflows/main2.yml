@@ -1,11 +1,11 @@
-name: OrangeFox Recovery
+name: PBRP CI
 
 on:
-  workflow_dispatch:
+    workflow_dispatch:
 
 jobs:
   build:
-    name: OFRP Build CI
+    name: TWRP Build CI
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -22,40 +22,33 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: '8'
-    - name: Syncing OFRP sources
+    - name: Syncing PBRP sources
       run: |
-        mkdir ~/OFRP
-        cd ~/OFRP
+        mkdir ~/TWRP
+        cd ~/TWRP
         mkdir ~/.bin
         curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/.bin/repo
-        python3 ~/.bin/repo init --depth=1 -u https://github.com/unlegacy-devices/fox-7.1_manifest -b fox-7.1
-        git clone --branch twrp-6.0 --single-branch https://github.com/unlegacy-devices/twrp_device_huawei_y560.git ~/OFRP/device/huawei/y560
+        python3 ~/.bin/repo init --depth=1 -u https://github.com/unlegacy-devices/manifest_pb.git -b android-7.1
+        git clone --branch twrp-6.0 --single-branch https://github.com/unlegacy-devices/twrp_device_huawei_y560.git ~/TWRP/device/huawei/y560
+        git clone --depth=1 --branch android-7.1.2_r38 --single-branch https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8 /opt/toolchains/arm-eabi-4.8
         python3 ~/.bin/repo sync -c --force-sync --optimized-fetch --no-tags --no-clone-bundle --prune -j$(nproc --all)
-    - name: Building OFRP
+    - name: Building PBRP
       run: |
         OLDPATH=$PATH
         OLDJAVAHOME=$JAVA_HOME
         export PATH="$HOME/.jdk_7/java-se-7u75-ri/bin:$PATH"
         export JAVA_HOME="$HOME/.jdk_7/java-se-7u75-ri"
-        cd ~/OFRP
-        git clone https://github.com/NotNoelChannel/android_kernel_huawei_msm8909 -b cm-14.1 ~/OFRP/kernel/huawei/msm8909
-        sudo git clone --depth=1 --branch android-7.1.2_r38 --single-branch https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8 /opt/toolchains/arm-eabi-4.8
+        cd ~/TWRP
+        git clone https://github.com/NotNoelChannel/android_kernel_huawei_msm8909 -b cm-14.1 ~/TWRP/kernel/huawei/msm8909
         source build/envsetup.sh
-        export OF_MAINTAINER="NotNoelChannel"
-        export OF_DISABLE_MIUI_SPECIFIC_FEATURES=1
         export ALLOW_MISSING_DEPENDENCIES=true
         export LC_ALL=C
-        export OF_FL_PATH1="/flashlight"
-        export OF_LEGACY_SHAR512=1
-        export OF_DISABLE_KEYMASTER2=1
         lunch omni_y560-eng
         make -j$(nproc --all) recoveryimage
         export PATH=$OLDPATH
         export JAVA_HOME=$OLDJAVAHOME
-    - name: Uploading OFRP builds
+    - name: Uploading PBRP builds
       uses: actions/upload-artifact@v3
       with:
-        name: ofrp
-        path: | 
-          /home/runner/OFRP/out/target/product/y560/recovery.*
-          /home/runner/OFRP/out/target/product/y560/OrangeFox-*.zip
+        name: pbrp
+        path: /home/runner/TWRP/out/target/product/y560/recovery.*
